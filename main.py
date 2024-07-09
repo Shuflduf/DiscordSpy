@@ -7,8 +7,8 @@ intents.message_content = True
 client = discord.Client(intents=intents)
 
 token = os.environ['BOT_TOKEN']
-target = os.environ['TARGET_ID']
-log_channel = os.environ['BOT_TOKEN']
+target = os.environ['TEST_ID']
+log_channel = os.environ['LOG_CHANNEL']
 
 
 @client.event
@@ -20,9 +20,10 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    if message.author.id == target:
+    if message.author.id == int(target):
         channel = client.get_channel(int(log_channel))
         await channel.send(message.content)
+        print(message.author.name)
 
 
 client.run(token)
