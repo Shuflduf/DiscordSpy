@@ -3,11 +3,13 @@ import os
 
 intents = discord.Intents.default()
 intents.message_content = True
+intents.presences = True
+intents.members = True
 
 client = discord.Client(intents=intents)
 
 token = os.environ['BOT_TOKEN']
-target = os.environ['TEST_ID']
+target = os.environ['TARGET_ID']
 log_channel = os.environ['LOG_CHANNEL']
 
 
@@ -24,6 +26,13 @@ async def on_message(message):
         channel = client.get_channel(int(log_channel))
         await channel.send(message.content)
         print(message.author.name)
+
+
+@client.event
+async def on_presence_update(before, after):
+    if before.status != after.status:
+        channel = client.get_channel(int(log_channel))
+        await channel.send(f'{after.name} is now {after.status}')
 
 
 client.run(token)
